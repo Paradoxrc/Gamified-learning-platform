@@ -151,12 +151,19 @@ export default function SubjectDetailPage() {
                 setIsLoadingRewards(false);
 
                 // Process Progress (Simulated)
-                if (progressRes.status === 'fulfilled' && progressRes.value.data?.status === 'success') { setUserProgress(progressRes.value.data.data); }
+                if (progressRes.status === 'fulfilled') {
+                    const progressData = progressRes.value as { data: { status: string; data: UserProgress } };
+                    if (progressData.data?.status === 'success') {
+                        setUserProgress(progressData.data.data);
+                    }
+                }
                 else { console.warn("Failed to load progress"); }
                 setIsLoadingProgress(false);
 
                  // Process Recommendations (Simulated)
-                if (recsRes.status === 'fulfilled' && recsRes.value.data?.status === 'success') { setRecommendedResources(recsRes.value.data.data.recommendations); }
+                if (recsRes.status === 'fulfilled' && (recsRes.value as any).data?.status === 'success') { 
+                    setRecommendedResources((recsRes.value as any).data.data.recommendations); 
+                }
                 else { console.warn("Failed to load recommendations"); }
                 setIsLoadingRecs(false);
 
